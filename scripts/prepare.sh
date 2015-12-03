@@ -7,7 +7,8 @@ IFS=$'\n\t'
 # This file is part of the xPacks project (https://xpacks.github.io).
 #
 
-RELEASE_VERSION="100"
+# RELEASE_VERSION="100"
+RELEASE_VERSION="110"
 
 FAMILY="STM32F7"
 GITHUB_PROJECT="xpacks/stm32f7-hal"

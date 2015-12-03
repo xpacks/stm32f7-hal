@@ -5,7 +5,7 @@ includes the STM32F7 HAL files.
 
 ## Version
 
-* v100
+* v110
 
 ## Documentation
 
@@ -16,7 +16,7 @@ The latest STM documentation is available from
 
 The original files are available in the `originals` branch.
 
-These files were extracted from `stm32cube_fw_f7_v100.zip`.
+These files were extracted from `stm32cube_fw_f7_v110.zip`.
 
 To save space, only the following folder was copied:
 

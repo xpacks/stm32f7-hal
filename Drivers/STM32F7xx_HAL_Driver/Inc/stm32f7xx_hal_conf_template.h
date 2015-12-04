@@ -41,6 +41,12 @@
 #ifndef __STM32F7xx_HAL_CONF_H
 #define __STM32F7xx_HAL_CONF_H
 
+// [ILG]
+#if defined ( __GNUC__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpadded"
+#endif
+
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -413,6 +419,11 @@
 
 #ifdef __cplusplus
 }
+#endif
+
+ // [ILG]
+#if defined ( __GNUC__ )
+#pragma GCC diagnostic pop
 #endif
 
 #endif /* __STM32F7xx_HAL_CONF_H */

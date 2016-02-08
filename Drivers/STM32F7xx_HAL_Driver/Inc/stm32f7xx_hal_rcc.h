@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_rcc.h
   * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    25-June-2015
+  * @version V1.0.2
+  * @date    21-September-2015
   * @brief   Header file of RCC HAL module.
   ******************************************************************************
   * @attention
@@ -75,7 +75,7 @@ typedef struct
                             This parameter must be a number between Min_Data = 2 and Max_Data = 63    */        
 
   uint32_t PLLN;       /*!< PLLN: Multiplication factor for PLL VCO output clock.
-                            This parameter must be a number between Min_Data = 192 and Max_Data = 432 */
+                            This parameter must be a number between Min_Data = 100 and Max_Data = 432 */
 
   uint32_t PLLP;       /*!< PLLP: Division factor for main system clock (SYSCLK).
                             This parameter must be a value of @ref RCC_PLLP_Clock_Divider             */
@@ -418,8 +418,8 @@ typedef struct
   * @{
   */
 #define RCC_LSEDRIVE_LOW                 ((uint32_t)0x00000000)
-#define RCC_LSEDRIVE_MEDIUMLOW           RCC_BDCR_LSEDRV_1
-#define RCC_LSEDRIVE_MEDIUMHIGH          RCC_BDCR_LSEDRV_0
+#define RCC_LSEDRIVE_MEDIUMLOW           RCC_BDCR_LSEDRV_0
+#define RCC_LSEDRIVE_MEDIUMHIGH          RCC_BDCR_LSEDRV_1
 #define RCC_LSEDRIVE_HIGH                RCC_BDCR_LSEDRV
 /**
   * @}
@@ -907,9 +907,9 @@ typedef struct
   *         frequency ranges from 1 to 2 MHz. It is recommended to select a frequency
   *         of 2 MHz to limit PLL jitter.
   * @param  __PLLN__: specifies the multiplication factor for PLL VCO output clock
-  *         This parameter must be a number between Min_Data = 192 and Max_Data = 432.
+  *         This parameter must be a number between Min_Data = 100 and Max_Data = 432.
   * @note   You have to set the PLLN parameter correctly to ensure that the VCO
-  *         output frequency is between 192 and 432 MHz.
+  *         output frequency is between 100 and 432 MHz.
   * @param  __PLLP__: specifies the division factor for main system clock (SYSCLK)
   *         This parameter must be a number in the range {2, 4, 6, or 8}.
   * @note   You have to set the PLLP parameter correctly to not exceed 216 MHz on
@@ -1024,7 +1024,52 @@ typedef struct
 /**
   * @}
   */
+  
+/** @defgroup RCCEx_MCOx_Clock_Config RCC Extended MCOx Clock Config
+  * @{   
+  */ 
+  
+/** @brief  Macro to configure the MCO1 clock.
+  * @param  __MCOCLKSOURCE__ specifies the MCO clock source.
+  *          This parameter can be one of the following values:
+  *            @arg RCC_MCO1SOURCE_HSI: HSI clock selected as MCO1 source
+  *            @arg RCC_MCO1SOURCE_LSE: LSE clock selected as MCO1 source
+  *            @arg RCC_MCO1SOURCE_HSE: HSE clock selected as MCO1 source
+  *            @arg RCC_MCO1SOURCE_PLLCLK: main PLL clock selected as MCO1 source
+  * @param  __MCODIV__ specifies the MCO clock prescaler.
+  *          This parameter can be one of the following values:
+  *            @arg RCC_MCODIV_1: no division applied to MCOx clock
+  *            @arg RCC_MCODIV_2: division by 2 applied to MCOx clock
+  *            @arg RCC_MCODIV_3: division by 3 applied to MCOx clock
+  *            @arg RCC_MCODIV_4: division by 4 applied to MCOx clock
+  *            @arg RCC_MCODIV_5: division by 5 applied to MCOx clock
+  */
 
+#define __HAL_RCC_MCO1_CONFIG(__MCOCLKSOURCE__, __MCODIV__) \
+        MODIFY_REG(RCC->CFGR, (RCC_CFGR_MCO1 | RCC_CFGR_MCO1PRE), ((__MCOCLKSOURCE__) | (__MCODIV__)))
+                
+/** @brief  Macro to configure the MCO2 clock.
+  * @param  __MCOCLKSOURCE__ specifies the MCO clock source.
+  *          This parameter can be one of the following values:
+  *            @arg RCC_MCO2SOURCE_SYSCLK: System clock (SYSCLK) selected as MCO2 source
+  *            @arg RCC_MCO2SOURCE_PLLI2SCLK: PLLI2S clock selected as MCO2 source 
+  *            @arg RCC_MCO2SOURCE_HSE: HSE clock selected as MCO2 source
+  *            @arg RCC_MCO2SOURCE_PLLCLK: main PLL clock selected as MCO2 source
+  * @param  __MCODIV__ specifies the MCO clock prescaler.
+  *          This parameter can be one of the following values:
+  *            @arg RCC_MCODIV_1: no division applied to MCOx clock
+  *            @arg RCC_MCODIV_2: division by 2 applied to MCOx clock
+  *            @arg RCC_MCODIV_3: division by 3 applied to MCOx clock
+  *            @arg RCC_MCODIV_4: division by 4 applied to MCOx clock
+  *            @arg RCC_MCODIV_5: division by 5 applied to MCOx clock
+  */
+
+#define __HAL_RCC_MCO2_CONFIG(__MCOCLKSOURCE__, __MCODIV__) \
+        MODIFY_REG(RCC->CFGR, (RCC_CFGR_MCO2 | RCC_CFGR_MCO2PRE), ((__MCOCLKSOURCE__) | ((__MCODIV__) << 3)));
+/**
+  * @}
+  */
+  
 /** @defgroup RCC_Flags_Interrupts_Management Flags Interrupts Management
   * @brief macros to manage the specified RCC Flags and interrupts.
   * @{
@@ -1225,7 +1270,7 @@ void HAL_RCC_CSSCallback(void);
                                      ((SOURCE) == RCC_SYSCLKSOURCE_PLLCLK))
 #define IS_RCC_PLLM_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 63))
 
-#define IS_RCC_PLLN_VALUE(VALUE) ((192 <= (VALUE)) && ((VALUE) <= 432))
+#define IS_RCC_PLLN_VALUE(VALUE) ((100 <= (VALUE)) && ((VALUE) <= 432))
 
 #define IS_RCC_PLLP_VALUE(VALUE) (((VALUE) == RCC_PLLP_DIV2) || ((VALUE) == RCC_PLLP_DIV4) || \
                                   ((VALUE) == RCC_PLLP_DIV6) || ((VALUE) == RCC_PLLP_DIV8))

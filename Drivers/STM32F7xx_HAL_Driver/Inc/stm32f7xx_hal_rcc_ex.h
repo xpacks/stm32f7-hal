@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
   * @file    stm32f7xx_hal_rcc_ex.h
-  * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    25-June-2015
+  * @author  MCD Application Team                                                                                                     
+  * @version V1.0.2
+  * @date    21-September-2015
   * @brief   Header file of RCC HAL Extension module.
   ******************************************************************************
   * @attention
@@ -65,7 +65,7 @@
 typedef struct
 {
   uint32_t PLLI2SN;    /*!< Specifies the multiplication factor for PLLI2S VCO output clock.
-                            This parameter must be a number between Min_Data = 49 and Max_Data = 432.
+                            This parameter must be a number between Min_Data = 50 and Max_Data = 432.
                             This parameter will be used only when PLLI2S is selected as Clock Source I2S or SAI */
 
   uint32_t PLLI2SR;    /*!< Specifies the division factor for I2S clock.
@@ -87,7 +87,7 @@ typedef struct
 typedef struct
 {
   uint32_t PLLSAIN;    /*!< Specifies the multiplication factor for PLLI2S VCO output clock.
-                            This parameter must be a number between Min_Data = 49 and Max_Data = 432.
+                            This parameter must be a number between Min_Data = 50 and Max_Data = 432.
                             This parameter will be used only when PLLSAI is selected as Clock Source SAI or LTDC */ 
                                  
   uint32_t PLLSAIQ;    /*!< Specifies the division factor for SAI1 clock.
@@ -2039,9 +2039,9 @@ typedef struct
   * @note   PLLSAI clock source is common with the main PLL (configured in 
   *         RCC_PLLConfig function )
   * @param  __PLLSAIN__: specifies the multiplication factor for PLLSAI VCO output clock.
-  *         This parameter must be a number between Min_Data = 49 and Max_Data = 432.
+  *         This parameter must be a number between Min_Data = 50 and Max_Data = 432.
   * @note   You have to set the PLLSAIN parameter correctly to ensure that the VCO 
-  *         output frequency is between Min_Data = 49 and Max_Data = 432 MHz.
+  *         output frequency is between Min_Data = 50 and Max_Data = 432 MHz.
   * @param  __PLLSAIQ__: specifies the division factor for SAI clock
   *         This parameter must be a number between Min_Data = 2 and Max_Data = 15.
   * @param  __PLLSAIR__: specifies the division factor for LTDC clock
@@ -2056,9 +2056,9 @@ typedef struct
   * @note   PLLI2S clock source is common with the main PLL (configured in 
   *         HAL_RCC_ClockConfig() API)             
   * @param  __PLLI2SN__: specifies the multiplication factor for PLLI2S VCO output clock.
-  *         This parameter must be a number between Min_Data = 192 and Max_Data = 432.
+  *         This parameter must be a number between Min_Data = 100 and Max_Data = 432.
   * @note   You have to set the PLLI2SN parameter correctly to ensure that the VCO 
-  *         output frequency is between Min_Data = 192 and Max_Data = 432 MHz.
+  *         output frequency is between Min_Data = 100 and Max_Data = 432 MHz.
   * @param  __PLLI2SQ__: specifies the division factor for SAI clock.
   *         This parameter must be a number between Min_Data = 2 and Max_Data = 15. 
   * @param  __PLLI2SR__: specifies the division factor for I2S clock
@@ -2568,12 +2568,12 @@ uint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk);
                 (((SELECTION) & RCC_PERIPHCLK_SPDIFRX)     == RCC_PERIPHCLK_SPDIFRX)    || \
                 (((SELECTION) & RCC_PERIPHCLK_RTC)         == RCC_PERIPHCLK_RTC))
 #endif /* STM32F756xx || STM32F746xx */
-#define IS_RCC_PLLI2SN_VALUE(VALUE) ((49 <= (VALUE)) && ((VALUE) <= 432))
+#define IS_RCC_PLLI2SN_VALUE(VALUE) ((50 <= (VALUE)) && ((VALUE) <= 432))
 #define IS_RCC_PLLI2SP_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 8))
 #define IS_RCC_PLLI2SQ_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 15))
 #define IS_RCC_PLLI2SR_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 7))
 
-#define IS_RCC_PLLSAIN_VALUE(VALUE) ((49 <= (VALUE)) && ((VALUE) <= 432))
+#define IS_RCC_PLLSAIN_VALUE(VALUE) ((50 <= (VALUE)) && ((VALUE) <= 432))
 #define IS_RCC_PLLSAIP_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 8))
 #define IS_RCC_PLLSAIQ_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 15))
 #define IS_RCC_PLLSAIR_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 7))  

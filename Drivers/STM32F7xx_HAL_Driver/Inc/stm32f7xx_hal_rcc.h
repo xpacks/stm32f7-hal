@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_rcc.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    21-September-2015
+  * @version V1.0.3
+  * @date    13-November-2015
   * @brief   Header file of RCC HAL module.
   ******************************************************************************
   * @attention
@@ -418,8 +418,8 @@ typedef struct
   * @{
   */
 #define RCC_LSEDRIVE_LOW                 ((uint32_t)0x00000000)
-#define RCC_LSEDRIVE_MEDIUMLOW           RCC_BDCR_LSEDRV_0
-#define RCC_LSEDRIVE_MEDIUMHIGH          RCC_BDCR_LSEDRV_1
+#define RCC_LSEDRIVE_MEDIUMLOW           RCC_BDCR_LSEDRV_1
+#define RCC_LSEDRIVE_MEDIUMHIGH          RCC_BDCR_LSEDRV_0
 #define RCC_LSEDRIVE_HIGH                RCC_BDCR_LSEDRV
 /**
   * @}
@@ -442,7 +442,7 @@ typedef struct
   * @{
   */
 #define __HAL_RCC_CRC_CLK_ENABLE()   do { \
-                                        __IO uint32_t tmpreg; \
+                                      __IO uint32_t tmpreg = 0x00; \
                                         SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_CRCEN);\
                                         /* Delay after an RCC peripheral clock enabling */ \
                                         tmpreg = READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_CRCEN);\
@@ -450,7 +450,7 @@ typedef struct
                                       } while(0)
 									  
 #define __HAL_RCC_DMA1_CLK_ENABLE()   do { \
-                                        __IO uint32_t tmpreg; \
+                                      __IO uint32_t tmpreg = 0x00; \
                                         SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_DMA1EN);\
                                         /* Delay after an RCC peripheral clock enabling */ \
                                         tmpreg = READ_BIT(RCC->AHB1ENR, RCC_AHB1ENR_DMA1EN);\
@@ -472,7 +472,7 @@ typedef struct
   * @{
   */
 #define __HAL_RCC_WWDG_CLK_ENABLE()   do { \
-                                        __IO uint32_t tmpreg; \
+                                      __IO uint32_t tmpreg = 0x00; \
                                         SET_BIT(RCC->APB1ENR, RCC_APB1ENR_WWDGEN);\
                                         /* Delay after an RCC peripheral clock enabling */ \
                                         tmpreg = READ_BIT(RCC->APB1ENR, RCC_APB1ENR_WWDGEN);\
@@ -480,7 +480,7 @@ typedef struct
                                       } while(0)
 									  
 #define __HAL_RCC_PWR_CLK_ENABLE()   do { \
-                                        __IO uint32_t tmpreg; \
+                                      __IO uint32_t tmpreg = 0x00; \
                                         SET_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN);\
                                         /* Delay after an RCC peripheral clock enabling */ \
                                         tmpreg = READ_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN);\
@@ -501,7 +501,7 @@ typedef struct
   * @{
   */
 #define __HAL_RCC_SYSCFG_CLK_ENABLE()   do { \
-                                        __IO uint32_t tmpreg; \
+                                      __IO uint32_t tmpreg = 0x00; \
                                         SET_BIT(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN);\
                                         /* Delay after an RCC peripheral clock enabling */ \
                                         tmpreg = READ_BIT(RCC->APB2ENR, RCC_APB2ENR_SYSCFGEN);\
@@ -963,8 +963,8 @@ typedef struct
   *                                       used as I2S clock source.
   */
 #define __HAL_RCC_I2S_CONFIG(__SOURCE__) do {RCC->CFGR &= ~(RCC_CFGR_I2SSRC); \
-                                          RCC->CFGR |= (__SOURCE__); \
-                                         }while(0)
+                                             RCC->CFGR |= (__SOURCE__);       \
+                                            }while(0)
 
 /** @brief Macros to enable or disable the PLLI2S. 
   * @note  The PLLI2S is disabled by hardware when entering STOP and STANDBY modes.
@@ -1270,7 +1270,7 @@ void HAL_RCC_CSSCallback(void);
                                      ((SOURCE) == RCC_SYSCLKSOURCE_PLLCLK))
 #define IS_RCC_PLLM_VALUE(VALUE) ((2 <= (VALUE)) && ((VALUE) <= 63))
 
-#define IS_RCC_PLLN_VALUE(VALUE) ((100 <= (VALUE)) && ((VALUE) <= 432))
+#define IS_RCC_PLLN_VALUE(VALUE) ((50 <= (VALUE)) && ((VALUE) <= 432))
 
 #define IS_RCC_PLLP_VALUE(VALUE) (((VALUE) == RCC_PLLP_DIV2) || ((VALUE) == RCC_PLLP_DIV4) || \
                                   ((VALUE) == RCC_PLLP_DIV6) || ((VALUE) == RCC_PLLP_DIV8))
@@ -1321,9 +1321,9 @@ void HAL_RCC_CSSCallback(void);
 
 
 #define IS_RCC_LSE_DRIVE(DRIVE) (((DRIVE) == RCC_LSEDRIVE_LOW)        || \
-                                     ((DRIVE) == RCC_LSEDRIVE_MEDIUMLOW)  || \
-                                     ((DRIVE) == RCC_LSEDRIVE_MEDIUMHIGH) || \
-                                     ((DRIVE) == RCC_LSEDRIVE_HIGH))
+                                 ((DRIVE) == RCC_LSEDRIVE_MEDIUMLOW)  || \
+                                 ((DRIVE) == RCC_LSEDRIVE_MEDIUMHIGH) || \
+                                 ((DRIVE) == RCC_LSEDRIVE_HIGH))
 /**
   * @}
   */

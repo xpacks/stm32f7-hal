@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_ll_fmc.h
   * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    25-June-2015
+  * @version V1.0.2
+  * @date    21-September-2015
   * @brief   Header file of FMC HAL module.
   ******************************************************************************
   * @attention
@@ -819,8 +819,8 @@ typedef struct
 /** @defgroup FMC_Write_FIFO FMC Write FIFO 
   * @{
   */
-#define FMC_WRITE_FIFO_DISABLE           ((uint32_t)0x00000000)
-#define FMC_WRITE_FIFO_ENABLE            ((uint32_t)FMC_BCR1_WFDIS)
+#define FMC_WRITE_FIFO_DISABLE           ((uint32_t)FMC_BCR1_WFDIS)
+#define FMC_WRITE_FIFO_ENABLE            ((uint32_t)0x00000000)
 /**
   * @}
   */

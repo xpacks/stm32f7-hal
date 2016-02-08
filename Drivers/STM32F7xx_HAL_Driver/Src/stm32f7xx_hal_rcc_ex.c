@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_rcc_ex.c
   * @author  MCD Application Team
-  * @version V1.0.1
-  * @date    25-June-2015
+  * @version V1.0.2
+  * @date    21-September-2015
   * @brief   Extension RCC HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities RCC extension peripheral:
@@ -200,27 +200,26 @@ HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef  *PeriphClk
   /*------------------------------------ RTC configuration --------------------------------------*/
   if(((PeriphClkInit->PeriphClockSelection) & RCC_PERIPHCLK_RTC) == (RCC_PERIPHCLK_RTC))
   {
+    /* Enable Power Clock*/
+    __HAL_RCC_PWR_CLK_ENABLE();
+      
+    /* Enable write access to Backup domain */
+    PWR->CR1 |= PWR_CR1_DBP;
+      
+    /* Get Start Tick*/
+    tickstart = HAL_GetTick();
+      
+    /* Wait for Backup domain Write protection disable */
+    while((PWR->CR1 & PWR_CR1_DBP) == RESET)
+    {
+      if((HAL_GetTick() - tickstart) > RCC_DBP_TIMEOUT_VALUE)
+      {
+        return HAL_TIMEOUT;
+      }      
+    }
     /* Reset the Backup domain only if the RTC Clock source selection is modified */ 
     if((RCC->BDCR & RCC_BDCR_RTCSEL) != (PeriphClkInit->RTCClockSelection & RCC_BDCR_RTCSEL))
     {
-      /* Enable Power Clock*/
-      __HAL_RCC_PWR_CLK_ENABLE();
-      
-      /* Enable write access to Backup domain */
-      PWR->CR1 |= PWR_CR1_DBP;
-      
-      /* Get Start Tick*/
-      tickstart = HAL_GetTick();
-      
-      /* Wait for Backup domain Write protection disable */
-      while((PWR->CR1 & PWR_CR1_DBP) == RESET)
-      {
-        if((HAL_GetTick() - tickstart) > RCC_DBP_TIMEOUT_VALUE)
-        {
-          return HAL_TIMEOUT;
-        }      
-      }
-
       /* Store the content of BDCR register before the reset of Backup Domain */
       tmpreg0 = (RCC->BDCR & ~(RCC_BDCR_RTCSEL));
       

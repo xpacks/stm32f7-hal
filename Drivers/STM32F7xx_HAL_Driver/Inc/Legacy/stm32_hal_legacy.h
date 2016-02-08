@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32_hal_legacy.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    21-September-2015
+  * @version V1.0.3
+  * @date    13-November-2015
   * @brief   This file contains aliases definition for the STM32Cube HAL constants 
   *          macros and functions maintained for legacy purpose.
   ******************************************************************************
@@ -143,6 +143,14 @@
 #define COMP_OUTPUT_TIM3IC1            COMP_OUTPUT_COMP1_TIM3IC1
 #define COMP_OUTPUT_TIM3OCREFCLR       COMP_OUTPUT_COMP1_TIM3OCREFCLR
 #endif /* STM32F373xC || STM32F378xx */
+/**
+  * @}
+  */
+
+/** @defgroup HAL_CORTEX_Aliased_Defines HAL CORTEX Aliased Defines maintained for legacy purpose
+  * @{
+  */
+#define __HAL_CORTEX_SYSTICKCLK_CONFIG HAL_SYSTICK_CLKSourceConfig
 /**
   * @}
   */
@@ -369,7 +377,7 @@
  #define  GPIO_SPEED_HIGH        GPIO_SPEED_FREQ_VERY_HIGH     
 #endif /* STM32L1 */
 
-#if defined(STM32F3) 
+#if defined(STM32F3) || defined(STM32F1)
  #define  GPIO_SPEED_LOW    GPIO_SPEED_FREQ_LOW
  #define  GPIO_SPEED_MEDIUM GPIO_SPEED_FREQ_MEDIUM
  #define  GPIO_SPEED_HIGH   GPIO_SPEED_FREQ_HIGH
@@ -2458,6 +2466,11 @@
 #define IS_RCC_PERIPHCLK            IS_RCC_PERIPHCLOCK
 
 #define RCC_IT_HSI14                RCC_IT_HSI14RDY
+
+#if defined(STM32L0)
+#define RCC_IT_LSECSS              RCC_IT_CSSLSE 
+#define RCC_IT_CSS                 RCC_IT_CSSHSE
+#endif
 
 #define IS_RCC_MCOSOURCE            IS_RCC_MCO1SOURCE
 #define __HAL_RCC_MCO_CONFIG        __HAL_RCC_MCO1_CONFIG

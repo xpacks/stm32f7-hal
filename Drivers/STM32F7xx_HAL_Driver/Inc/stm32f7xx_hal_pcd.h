@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_pcd.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    21-September-2015
+  * @version V1.0.3
+  * @date    13-November-2015
   * @brief   Header file of PCD HAL module.
   ******************************************************************************
   * @attention
@@ -242,7 +242,7 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef *hpcd);
 
 /* I/O operation functions  ***************************************************/
 /* Non-Blocking mode: Interrupt */
-/** @addtogroup PCD_Exported_Functions_Group2 IO operation functions
+/** @addtogroup PCD_Exported_Functions_Group2 Input and Output operation functions
   * @{
   */
 HAL_StatusTypeDef HAL_PCD_Start(PCD_HandleTypeDef *hpcd);

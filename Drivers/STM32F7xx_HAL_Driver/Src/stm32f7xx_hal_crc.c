@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_crc.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    21-September-2015
+  * @version V1.0.3
+  * @date    13-November-2015
   * @brief   CRC HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the Cyclic Redundancy Check (CRC) peripheral:
@@ -92,8 +92,8 @@ static uint32_t CRC_Handle_16(CRC_HandleTypeDef *hcrc, uint16_t pBuffer[], uint3
   */
 
 /** @defgroup HAL_CRC_Group1 Initialization/de-initialization functions 
- *  @brief    Initialization and Configuration functions. 
- *
+  *  @brief    Initialization and Configuration functions. 
+  *
 @verbatim    
  ===============================================================================
             ##### Initialization and de-initialization functions #####
@@ -140,7 +140,7 @@ HAL_StatusTypeDef HAL_CRC_Init(CRC_HandleTypeDef *hcrc)
   /* check whether or not non-default generating polynomial has been 
    * picked up by user */
   assert_param(IS_DEFAULT_POLYNOMIAL(hcrc->Init.DefaultPolynomialUse)); 
-  if (hcrc->Init.DefaultPolynomialUse == DEFAULT_POLYNOMIAL_ENABLE)
+  if(hcrc->Init.DefaultPolynomialUse == DEFAULT_POLYNOMIAL_ENABLE)
   {
     /* initialize IP with default generating polynomial */
     WRITE_REG(hcrc->Instance->POL, DEFAULT_CRC32_POLY);  
@@ -149,7 +149,7 @@ HAL_StatusTypeDef HAL_CRC_Init(CRC_HandleTypeDef *hcrc)
   else
   {
     /* initialize CRC IP with generating polynomial defined by user */
-    if (HAL_CRCEx_Polynomial_Set(hcrc, hcrc->Init.GeneratingPolynomial, hcrc->Init.CRCLength) != HAL_OK)
+    if(HAL_CRCEx_Polynomial_Set(hcrc, hcrc->Init.GeneratingPolynomial, hcrc->Init.CRCLength) != HAL_OK)
     {
       return HAL_ERROR;
     }
@@ -158,7 +158,7 @@ HAL_StatusTypeDef HAL_CRC_Init(CRC_HandleTypeDef *hcrc)
   /* check whether or not non-default CRC initial value has been 
    * picked up by user */
   assert_param(IS_DEFAULT_INIT_VALUE(hcrc->Init.DefaultInitValueUse));
-  if (hcrc->Init.DefaultInitValueUse == DEFAULT_INIT_VALUE_ENABLE)
+  if(hcrc->Init.DefaultInitValueUse == DEFAULT_INIT_VALUE_ENABLE)
   {
     WRITE_REG(hcrc->Instance->INIT, DEFAULT_CRC_INITVALUE);  
   }
@@ -235,6 +235,9 @@ HAL_StatusTypeDef HAL_CRC_DeInit(CRC_HandleTypeDef *hcrc)
   */
 __weak void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcrc);
+  
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_CRC_MspInit can be implemented in the user file
    */
@@ -247,6 +250,9 @@ __weak void HAL_CRC_MspInit(CRC_HandleTypeDef *hcrc)
   */
 __weak void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hcrc);
+  
   /* NOTE : This function should not be modified, when the callback is needed,
             the HAL_CRC_MspDeInit can be implemented in the user file
    */
@@ -257,8 +263,8 @@ __weak void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc)
   */
 
 /** @defgroup HAL_CRC_Group2 Peripheral Control functions 
- *  @brief   Peripheral Control functions 
- *
+  *  @brief   Peripheral Control functions 
+  *
 @verbatim  
  ==============================================================================
                       ##### Peripheral Control functions #####
@@ -398,8 +404,6 @@ uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t
   return temp;
 }
 
-
-
 /**             
   * @brief  Enter 8-bit input data to the CRC calculator.
   *         Specific data handling to optimize processing time.  
@@ -420,20 +424,20 @@ static uint32_t CRC_Handle_8(CRC_HandleTypeDef *hcrc, uint8_t pBuffer[], uint32_
      hcrc->Instance->DR = (uint32_t)(((uint32_t)(pBuffer[4*i])<<24) | ((uint32_t)(pBuffer[4*i+1])<<16) | ((uint32_t)(pBuffer[4*i+2])<<8) | (uint32_t)(pBuffer[4*i+3]));
    }
    /* last bytes specific handling */
-   if ((BufferLength%4) != 0)
+   if((BufferLength%4) != 0)
    {
-     if  (BufferLength%4 == 1)
+     if(BufferLength%4 == 1)
      {
        *(__IO uint8_t*) (&hcrc->Instance->DR) = pBuffer[4*i];
      }
-     if  (BufferLength%4 == 2)
+     if(BufferLength%4 == 2)
      {
-       *(__IO uint32_t*) (&hcrc->Instance->DR) = (uint16_t)(((uint32_t)(pBuffer[4*i])<<8) | (uint32_t)(pBuffer[4*i+1]));
+       *(__IO uint16_t*) (&hcrc->Instance->DR) = (uint16_t)(((uint16_t)(pBuffer[4*i])<<8) | (uint16_t)(pBuffer[4*i+1]));
      }
-     if  (BufferLength%4 == 3)
+     if(BufferLength%4 == 3)
      {
-       *(__IO uint32_t*) (&hcrc->Instance->DR) = (uint16_t)(((uint32_t)(pBuffer[4*i])<<8) | (uint32_t)(pBuffer[4*i+1]));
-       *(__IO uint32_t*) (&hcrc->Instance->DR) = pBuffer[4*i+2];       
+       *(__IO uint16_t*) (&hcrc->Instance->DR) = (uint16_t)(((uint16_t)(pBuffer[4*i])<<8) | (uint16_t)(pBuffer[4*i+1]));
+       *(__IO uint8_t*) (&hcrc->Instance->DR) = pBuffer[4*i+2];       
      }
    }
   
@@ -460,9 +464,9 @@ static uint32_t CRC_Handle_16(CRC_HandleTypeDef *hcrc, uint16_t pBuffer[], uint3
   {
     hcrc->Instance->DR = (((uint32_t)(pBuffer[2*i])<<16) | (uint32_t)(pBuffer[2*i+1]));
   }
-  if ((BufferLength%2) != 0)
+  if((BufferLength%2) != 0)
   {
-       *(__IO uint32_t*) (&hcrc->Instance->DR) = pBuffer[2*i]; 
+     *(__IO uint16_t*) (&hcrc->Instance->DR) = pBuffer[2*i]; 
   }
    
   /* Return the CRC computed value */ 
@@ -474,8 +478,8 @@ static uint32_t CRC_Handle_16(CRC_HandleTypeDef *hcrc, uint16_t pBuffer[], uint3
   */
 
 /** @defgroup HAL_CRC_Group3 Peripheral State functions 
- *  @brief    Peripheral State functions. 
- *
+  *  @brief    Peripheral State functions. 
+  *
 @verbatim   
  ==============================================================================
                       ##### Peripheral State functions #####

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_hash.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    21-September-2015
+  * @version V1.0.3
+  * @date    13-November-2015
   * @brief   HASH HAL module driver.
   *          This file provides firmware functions to manage the following 
   *          functionalities of the HASH peripheral:
@@ -428,6 +428,9 @@ HAL_StatusTypeDef HAL_HASH_DeInit(HASH_HandleTypeDef *hhash)
   */
 __weak void HAL_HASH_MspInit(HASH_HandleTypeDef *hhash)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hhash);
+  
   /* NOTE: This function Should not be modified, when the callback is needed,
            the HAL_HASH_MspInit could be implemented in the user file
    */
@@ -441,6 +444,9 @@ __weak void HAL_HASH_MspInit(HASH_HandleTypeDef *hhash)
   */
 __weak void HAL_HASH_MspDeInit(HASH_HandleTypeDef *hhash)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hhash);
+  
   /* NOTE: This function Should not be modified, when the callback is needed,
            the HAL_HASH_MspDeInit could be implemented in the user file
    */
@@ -454,6 +460,9 @@ __weak void HAL_HASH_MspDeInit(HASH_HandleTypeDef *hhash)
   */
  __weak void HAL_HASH_InCpltCallback(HASH_HandleTypeDef *hhash)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hhash);
+  
   /* NOTE: This function Should not be modified, when the callback is needed,
            the HAL_HASH_InCpltCallback could be implemented in the user file
    */ 
@@ -467,6 +476,9 @@ __weak void HAL_HASH_MspDeInit(HASH_HandleTypeDef *hhash)
   */
  __weak void HAL_HASH_ErrorCallback(HASH_HandleTypeDef *hhash)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hhash);
+  
   /* NOTE: This function Should not be modified, when the callback is needed,
            the HAL_HASH_ErrorCallback could be implemented in the user file
    */ 
@@ -481,6 +493,9 @@ __weak void HAL_HASH_MspDeInit(HASH_HandleTypeDef *hhash)
   */
  __weak void HAL_HASH_DgstCpltCallback(HASH_HandleTypeDef *hhash)
 {
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hhash);
+  
   /* NOTE: This function Should not be modified, when the callback is needed,
            the HAL_HASH_DgstCpltCallback could be implemented in the user file
    */ 

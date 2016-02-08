@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_hcd.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    21-September-2015
+  * @version V1.0.3
+  * @date    13-November-2015
   * @brief   Header file of HCD HAL module.
   ******************************************************************************
   * @attention
@@ -176,7 +176,7 @@ void                HAL_HCD_MspDeInit(HCD_HandleTypeDef *hhcd);
   */
 
 /* I/O operation functions  ***************************************************/
-/** @addtogroup HCD_Exported_Functions_Group2 IO operation functions
+/** @addtogroup HCD_Exported_Functions_Group2 Input and Output operation functions
   * @{
   */
 HAL_StatusTypeDef       HAL_HCD_HC_SubmitRequest(HCD_HandleTypeDef *hhcd,

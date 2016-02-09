@@ -148,7 +148,8 @@ typedef struct
   * @{
   */
 static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength);
-static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma);
+// [ILG]
+static void* DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma);
 
 /**
   * @brief  Sets the DMA Transfer parameter.
@@ -913,7 +914,8 @@ uint32_t HAL_DMA_GetError(DMA_HandleTypeDef *hdma)
   *                     the configuration information for the specified DMA Stream. 
   * @retval Stream base address
   */
-static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma)
+// [ILG]
+static void* DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma)
 {
   uint32_t stream_number = (((uint32_t)hdma->Instance & 0xFF) - 16) / 24;
   
@@ -932,7 +934,8 @@ static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma)
     hdma->StreamBaseAddress = ((uint32_t)hdma->Instance & (uint32_t)(~0x3FF));
   }
   
-  return hdma->StreamBaseAddress;
+  // [ILG]
+  return (void*)hdma->StreamBaseAddress;
 }
 /**
   * @}

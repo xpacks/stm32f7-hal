@@ -33,3 +33,9 @@ and from it, the following folders/files were removed:
 
 * `stm32f7xx\_hal.h`: silence `-Wpadded`.
 
+## Tests
+
+```
+export PATH=/usr/local/gcc-arm-none-eabi-5_2-2015q4/bin:$PATH
+bash ../../../scripts/run-tests.sh
+```

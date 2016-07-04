@@ -10,12 +10,14 @@ IFS=$'\n\t'
 # RELEASE_VERSION="100"
 # RELEASE_VERSION="110"
 # RELEASE_VERSION="120"
-RELEASE_VERSION="130"
+# RELEASE_VERSION="130"
+RELEASE_VERSION="1.4.0"
 
 FAMILY="STM32F7"
 GITHUB_PROJECT="xpacks/stm32f7-hal"
 
-RELEASE_NAME="stm32cube_fw_f7_v${RELEASE_VERSION}"
+# RELEASE_NAME="stm32cube_fw_f7_v${RELEASE_VERSION}"
+RELEASE_NAME="en.stm32cubef7_v${RELEASE_VERSION}"
 ARCHIVE_NAME="${RELEASE_NAME}.zip"
 ARCHIVE_URL="https://sourceforge.net/projects/micro-os-plus/files/Vendor%20Archives/STM32/${ARCHIVE_NAME}"
 
@@ -91,4 +93,6 @@ and from it, the following folders/files were removed:
 EOF
 
 echo
-echo Check if ok and when ready, issue: \`git commit -m ${ARCHIVE_NAME}\`
+echo Check if ok and when ready, issue:
+echo git add -A
+echo git commit -m ${ARCHIVE_NAME}

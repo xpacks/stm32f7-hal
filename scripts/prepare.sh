@@ -7,6 +7,11 @@ IFS=$'\n\t'
 # This file is part of the xPacks project (https://xpacks.github.io).
 #
 
+# http://www.keil.com/dd2/pack/
+
+# Archives are to be downloaded from:
+# http://www.keil.com/pack/Keil.STM32F7xx_DFP.x.x.x.pack
+
 # https://sourceforge.net/projects/micro-os-plus/files/Vendor%20Archives/STM32/
 
 # RELEASE_VERSION="100"
@@ -14,29 +19,48 @@ IFS=$'\n\t'
 # RELEASE_VERSION="120"
 # RELEASE_VERSION="130"
 # RELEASE_VERSION="1.4.0"
-RELEASE_VERSION="1.5.0"
+# RELEASE_VERSION="1.5.0"
+
+# Switch to Keil CMSIS Pack
+RELEASE_VERSION="2.9.0"
 
 FAMILY="STM32F7"
 GITHUB_PROJECT="xpacks/stm32f7-hal"
 
-RELEASE_VERSION_COMPACT=$(echo ${RELEASE_VERSION} | sed 's/\.//g')
-RELEASE_NAME="stm32cube_fw_f7_v${RELEASE_VERSION_COMPACT}"
+# RELEASE_VERSION_COMPACT=$(echo ${RELEASE_VERSION} | sed 's/\.//g')
+# RELEASE_NAME="stm32cube_fw_f7_v${RELEASE_VERSION_COMPACT}"
 # RELEASE_NAME="en.stm32cubef7_v${RELEASE_VERSION}"
-ARCHIVE_NAME="${RELEASE_NAME}.zip"
-ARCHIVE_URL="https://sourceforge.net/projects/micro-os-plus/files/Vendor%20Archives/STM32/${ARCHIVE_NAME}"
+# ARCHIVE_NAME="${RELEASE_NAME}.zip"
+# ARCHIVE_URL="https://sourceforge.net/projects/micro-os-plus/files/Vendor%20Archives/STM32/${ARCHIVE_NAME}"
+
+NAME_PREFIX="Keil.${FAMILY}xx_DFP"
+ARCHIVE_NAME="${NAME_PREFIX}.${RELEASE_VERSION}.pack"
+ARCHIVE_URL="http://www.keil.com/pack/${ARCHIVE_NAME}"
 
 LOCAL_ARCHIVE_FILE="/tmp/xpacks/${ARCHIVE_NAME}"
+
+BRANCH_NAME="$(git symbolic-ref -q --short HEAD)"
+if [ "${BRANCH_NAME}" != "originals" ]
+then
+  echo "Run this only on the 'originals'' branch"
+  exit 1
+fi
 
 echo "Cleaning previous files..."
 for f in *
 do
-  if [ "${f}" == "scripts" ]
+  if [ -d "${f}" ]
   then
-    :
-  else
-    rm -rf "${f}"
+    if [ "${f}" == "scripts" -o "${f}" == "test" ]
+    then
+      :
+    else
+      rm -rf "${f}"
+    fi
   fi
 done
+
+rm -rf *.pdsc Release_notes.html package.xml
 
 if [ ! -f "${LOCAL_ARCHIVE_FILE}" ]
 then
@@ -45,17 +69,24 @@ then
 fi
 
 echo "Unpacking '${ARCHIVE_NAME}'..."
-unzip -q "${LOCAL_ARCHIVE_FILE}"
-mv STM32Cube_FW_*/Drivers .
+mkdir -p tmp
+(cd tmp; unzip -q "${LOCAL_ARCHIVE_FILE}")
+
+# mv STM32Cube_FW_*/Drivers .
+
+echo "Cherry picking the inteesting files..."
+mkdir -p Drivers
+mv tmp/Drivers/STM32F?xx_HAL_Driver Drivers
 
 echo "Removing unnecessary files..."
 rm -rf \
-Drivers/BSP/ \
-Drivers/CMSIS/ \
+tmp \
 Drivers/STM32F?xx_HAL_Driver/*.chm \
-STM32Cube_* \
 
 find . -name '*.exe' -exec rm \{} \;
+
+
+HAL_VERSION="$(cat Drivers/STM32F?xx_HAL_Driver/inc/stm32f?xx_hal.h | grep '@version' | sed 's/.*V//')"
 
 echo "Creating README.md..."
 cat <<EOF >README.md
@@ -66,12 +97,18 @@ includes the ${FAMILY} HAL files.
 
 ## Version
 
-* v${RELEASE_VERSION}
+* CMSIS Pack v${RELEASE_VERSION}
+* ST HAL v${HAL_VERSION}
 
 ## Documentation
 
 The latest STM documentation is available from
 [STM32CubeF7](http://www.st.com/web/catalog/tools/FM147/CL1794/SC961/SS1743/LN1897/PF261909).
+
+The latest CMSIS documentation is available from
+[keil.com](http://www.keil.com/cmsis).
+
+The list of latest packs is available from [keil.com](https://www.keil.com/dd2/pack/).
 
 ## Original files
 
@@ -79,16 +116,9 @@ The original files are available in the \`originals\` branch.
 
 These files were extracted from \`${ARCHIVE_NAME}\`.
 
-To save space, only the following folder was copied:
+To save space, only the following folders were preserved:
 
-* STM32Cube\_FW\_*/Drivers
-
-and from it, the following folders/files were removed:
-
-* all non-portable *.exe files
-* Drivers/BSP/
-* Drivers/CMSIS/
-* Drivers/STM32F?xx\_HAL\_Driver/*.chm
+* Drivers/STM32F\?xx\_HAL\_Driver/
 
 ## Changes
 
@@ -100,3 +130,4 @@ echo
 echo Check if ok and when ready, issue:
 echo git add -A
 echo git commit -m ${ARCHIVE_NAME}
+echo New HAL version ${HAL_VERSION}

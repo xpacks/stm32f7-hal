@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    stm32f7xx_hal_def.h
   * @author  MCD Application Team
-  * @version V1.1.2
-  * @date    23-September-2016 
+  * @version V1.2.0
+  * @date    30-December-2016
   * @brief   This file contains HAL common defines, enumeration, macros and 
   *          structures definitions. 
   ******************************************************************************
@@ -33,6 +33,7 @@
   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
+  * modified by ARM
   ******************************************************************************
   */
 
@@ -123,44 +124,106 @@ typedef enum
                                     }while (0)
 #endif /* USE_RTOS */
 
-#if  defined ( __GNUC__ )
+
+/** 
+  *  __weak / __packed definition
+  */ 
+/*
+ * ARM Compiler 4/5
+ */
+#if   defined ( __CC_ARM )
+  /* already defined by compiler */
+
+/*
+ * ARM Compiler 6 (armclang)
+ */
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
   #ifndef __weak
     #define __weak   __attribute__((weak))
   #endif /* __weak */
   #ifndef __packed
     #define __packed __attribute__((__packed__))
   #endif /* __packed */
-#endif /* __GNUC__ */
+
+/*
+ * GNU Compiler
+ */
+#elif defined ( __GNUC__ )
+  #ifndef __weak
+    #define __weak   __attribute__((weak))
+  #endif /* __weak */
+  #ifndef __packed
+    #define __packed __attribute__((__packed__))
+  #endif /* __packed */
+
+/*
+ * IAR Compiler
+ */
+#elif defined ( __ICCARM__ )
+  /* already defined by compiler */
+
+#endif
 
 
-/* Macro to get variable aligned on 4-bytes, for __ICCARM__ the directive "#pragma data_alignment=4" must be used instead */
-#if defined   (__GNUC__)        /* GNU Compiler */
+/** 
+  *  macro to get variable aligned on 4-bytes
+  */ 
+/*
+ * ARM Compiler 4/5
+ */
+#if   defined ( __CC_ARM )
+  #ifndef __ALIGN_END
+    #define __ALIGN_END
+  #endif /* __ALIGN_END */
+  #ifndef __ALIGN_BEGIN      
+    #define __ALIGN_BEGIN    __align(4)  
+  #endif /* __ALIGN_BEGIN */
+
+/*
+ * ARM Compiler 6 (armclang)
+ */
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
   #ifndef __ALIGN_END
     #define __ALIGN_END    __attribute__ ((aligned (4)))
   #endif /* __ALIGN_END */
   #ifndef __ALIGN_BEGIN  
     #define __ALIGN_BEGIN
   #endif /* __ALIGN_BEGIN */
-#else
+
+/*
+ * GNU Compiler
+ */
+#elif defined ( __GNUC__ )
+  #ifndef __ALIGN_END
+    #define __ALIGN_END    __attribute__ ((aligned (4)))
+  #endif /* __ALIGN_END */
+  #ifndef __ALIGN_BEGIN  
+    #define __ALIGN_BEGIN
+  #endif /* __ALIGN_BEGIN */
+
+/*
+ * IAR Compiler
+ */
+#elif defined ( __ICCARM__ )
+  /* the directive "#pragma data_alignment=4" must be used instead */
   #ifndef __ALIGN_END
     #define __ALIGN_END
   #endif /* __ALIGN_END */
   #ifndef __ALIGN_BEGIN      
-    #if defined   (__CC_ARM)      /* ARM Compiler */
-      #define __ALIGN_BEGIN    __align(4)  
-    #elif defined (__ICCARM__)    /* IAR Compiler */
-      #define __ALIGN_BEGIN 
-    #endif /* __CC_ARM */
+    #define __ALIGN_BEGIN 
   #endif /* __ALIGN_BEGIN */
-#endif /* __GNUC__ */
+
+#endif
 
 
 /** 
   * @brief  __RAM_FUNC definition
   */ 
-#if defined ( __CC_ARM   )
-/* ARM Compiler
-   ------------
+/*
+ * ARM Compiler 4/5
+ */
+#if   defined ( __CC_ARM )
+/*
    RAM functions are defined using the toolchain options. 
    Functions that are executed in RAM should reside in a separate source module.
    Using the 'Options for File' dialog you can simply change the 'Code / Const' 
@@ -170,39 +233,71 @@ typedef enum
 */
 #define __RAM_FUNC HAL_StatusTypeDef 
 
-#elif defined ( __ICCARM__ )
-/* ICCARM Compiler
-   ---------------
-   RAM functions are defined using a specific toolchain keyword "__ramfunc". 
+/*
+ * ARM Compiler 6 (armclang)
+ */
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+/*
+   RAM functions are defined using the toolchain options. 
+   Functions that are executed in RAM should reside in a separate source module.
+   Using the 'Options for File' dialog you can simply change the 'Code / Const' 
+   area of a module to a memory space in physical RAM.
+   Available memory areas are declared in the 'Target' tab of the 'Options for Target'
+   dialog. 
 */
-#define __RAM_FUNC __ramfunc HAL_StatusTypeDef
+#define __RAM_FUNC HAL_StatusTypeDef 
 
-#elif defined   (  __GNUC__  )
-/* GNU Compiler
-   ------------
+/*
+ * GNU Compiler
+ */
+#elif defined ( __GNUC__ )
+/*
   RAM functions are defined using a specific toolchain attribute 
    "__attribute__((section(".RamFunc")))".
 */
 #define __RAM_FUNC HAL_StatusTypeDef  __attribute__((section(".RamFunc")))
 
+/*
+ * IAR Compiler
+ */
+#elif defined ( __ICCARM__ )
+/*
+   RAM functions are defined using a specific toolchain keyword "__ramfunc". 
+*/
+#define __RAM_FUNC __ramfunc HAL_StatusTypeDef
+
 #endif
+
 
 /** 
   * @brief  __NOINLINE definition
-  */ 
-#if defined ( __CC_ARM   ) || defined   (  __GNUC__  )
-/* ARM & GNUCompiler 
-   ---------------- 
-*/
-#define __NOINLINE __attribute__ ( (noinline) )
+  */
+/*
+ * ARM Compiler 4/5
+ */
+#if   defined ( __CC_ARM )
+  #define __NOINLINE __attribute__ ((noinline) )
 
+/*
+ * ARM Compiler 6 (armclang)
+ */
+#elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  #define __NOINLINE __attribute__ ((noinline) )
+
+/*
+ * GNU Compiler
+ */
+#elif defined ( __GNUC__ )
+  #define __NOINLINE __attribute__ ((noinline) )
+
+/*
+ * IAR Compiler
+ */
 #elif defined ( __ICCARM__ )
-/* ICCARM Compiler
-   ---------------
-*/
-#define __NOINLINE _Pragma("optimize = no_inline")
+  #define __NOINLINE _Pragma("optimize = no_inline")
 
 #endif
+
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,0 @@
-{
-	"$schema": "http://xcdl.github.io/schemas/xcdl-1-1.json",
-	"name": "/ilg/stm/stm32f7/hal",
-	"description": "STM32F7 HAL files."
-}
